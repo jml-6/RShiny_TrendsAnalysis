@@ -149,8 +149,14 @@ ui <- navbarPage(
   tabPanel(
     "Competition",
     fluidPage(
-      actionButton("go", "Go"),
-      numericInput("n", "n", 50),
+      tags$label("CPC Codes"),
+      textInput("trends_input1", "", placeholder = "Enter codes..."),
+      tags$label("Sub CPC Codes"),
+      textInput("trends_input2", "", placeholder = "Enter codes..."),
+      tags$label("CPC Labels"),
+      textInput("trends_input3", "", placeholder = "Enter labels..."),
+      textInput("n", "n", 50),
+      actionButton("go", "Go", class='btn-primary'),
       plotOutput("plot")
     )
   ),
