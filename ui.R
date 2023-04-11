@@ -11,6 +11,7 @@ ui <- navbarPage(
   
   # Add custom CSS styling
   tags$head(
+    tags$script(src = "message-handler.js"),
     tags$style(HTML("
         /* Forest green color for active tab */
     .nav-tabs > li.active > a, 
@@ -148,25 +149,9 @@ ui <- navbarPage(
   tabPanel(
     "Competition",
     fluidPage(
-      fluidRow(
-        column(
-          3,
-          tags$label("Input 1"),
-          textInput("comp_input1", "", placeholder = "Enter value..."),
-          tags$label("Input 2"),
-          textInput("comp_input2", "", placeholder = "Enter value..."),
-          tags$label("Input 3"),
-          textInput("comp_input3", "", placeholder = "Enter value..."),
-          actionButton("comp_button", "Run Analysis", class = "btn-primary")
-        ),
-        column(
-          9,
-          h2("Competition Analysis Results"),
-          textOutput("comp_output1"),
-          textOutput("comp_output2"),
-          textOutput("comp_output3")
-        )
-      )
+      actionButton("go", "Go"),
+      numericInput("n", "n", 50),
+      plotOutput("plot")
     )
   ),
   
@@ -192,5 +177,6 @@ ui <- navbarPage(
           textOutput("trends_output2"),
           textOutput("trends_output3")
         )))))
+
         
         

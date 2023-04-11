@@ -46,6 +46,19 @@ server <- function(input,output,session) {
      paste('You entered: ',input$comp_input3,sep = '',collapse = '')
    })
    output$comp_output3 <- renderText({text_labels_input5()})
+   
+   observeEvent(input$trends_button, {
+     session$sendCustomMessage(type = 'testmessage',
+                               message = 'Thank you for clicking')
+   })
+   randomVals <- eventReactive(input$go, {
+     runif(input$n)
+   })
+   
+   output$plot <- renderPlot({
+     hist(randomVals())
+   })
+
   
   # # Reactive objects:
   # market_cpc_input_text <- reactive({
