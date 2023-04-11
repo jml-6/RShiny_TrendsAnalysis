@@ -1,0 +1,10 @@
+heights <- totals$cagr_2017_2021
+
+# Create a bar chart
+barplot(heights, 
+        main = "Competition Analysis (2017 - 2021)",  # Specify the title of the chart
+        ylab = "CAGR",               # Specify the label for the y-axis
+        col = "steelblue",           # Specify the color of the bars
+        border = "black",            # Specify the color of the bar borders
+        names.arg = totals$disambig_assignee_organization,
+        las = 3) # Specify the labels for the x-axis (assuming "category" is the column name in your "totals" table)
