@@ -7,7 +7,7 @@ library(bslib)
 ui <- navbarPage(
   
   # Application title
-  title = "My Shiny App",
+  title = "Patent Analytics",
   
   # Add custom CSS styling
   tags$head(
@@ -141,7 +141,7 @@ ui <- navbarPage(
   # Home page
   tabPanel(
     "Home",
-    h2("Welcome to my Shiny App!"),
+    h2("Welcome to the wonderful world of patent analytics!"),
     p("Please select an analysis from the tabs above.")
   ),
   
