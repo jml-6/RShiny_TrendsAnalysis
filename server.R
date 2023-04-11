@@ -47,10 +47,6 @@ server <- function(input,output,session) {
    })
    output$comp_output3 <- renderText({text_labels_input5()})
    
-   observeEvent(input$trends_button, {
-     session$sendCustomMessage(type = 'testmessage',
-                               message = 'Thank you for clicking')
-   })
    randomVals <- eventReactive(input$go, {
      runif(input$n)
    })
