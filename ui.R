@@ -151,13 +151,13 @@ ui <- navbarPage(
     "Competition",
     fluidPage(
       tags$label("CPC Codes"),
-      textInput("cpc_codes", "", placeholder = "Enter codes..."),
+      textInput("cpc_codes", "A61K38/", placeholder = "Enter codes..."),
       tags$label("Sub CPC Codes"),
       textInput("trends_input2", "", placeholder = "Enter codes..."),
       tags$label("CPC Labels"),
       textInput("trends_input3", "", placeholder = "Enter labels..."),
       textInput("n", "n", 50),
-      actionButton("go", "Go", class='btn-primary'),
+      actionButton("generate_competitive_position", "Go", class='btn-primary'),
       DTOutput(outputId = 'competition_dt')
     )
   ),

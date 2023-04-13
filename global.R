@@ -6,7 +6,6 @@ library(shinydashboard)
 library(plotly)
 library(bslib)
 library(feather)
-library(DT)
 
 
 #load('data/unique_cpc_group.Rdata')
