@@ -9,10 +9,10 @@ library(feather)
 library(DT)
 
 
-load('data/unique_cpc_group.Rdata')
-assignee <- read.csv('data/g_assignee_disambiguated_2012_2021.feather')
-location <- read.csv('data/g_location_disambiguated_2012_2021.feather')
-patent <- read.csv('data/g_patent_2012_2021.feather')
+#load('data/unique_cpc_group.Rdata')
+assignee <- fread('data/g_assignee_disambiguated_2012_2021.csv')
+location <- fread('data/g_location_disambiguated_2012_2021.csv')
+patent <- fread('data/g_patent_2012_2021.csv')
 cpc <- fread('data/g_cpc_current_2012_2021.csv')
 cpc$patent_id <- as.character(cpc$patent_id)
 
