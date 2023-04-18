@@ -6,6 +6,8 @@ library(shinydashboard)
 library(plotly)
 library(bslib)
 library(feather)
+library(httr)
+library(RColorBrewer)
 
 
 #load('data/unique_cpc_group.Rdata')

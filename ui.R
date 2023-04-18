@@ -150,17 +150,25 @@ ui <- navbarPage(
   tabPanel(
     "Competition",
     fluidPage(
-      tags$label("CPC Codes"),
-      textInput("cpc_codes", "A61K38/", placeholder = "Enter codes..."),
-      tags$label("Sub CPC Codes"),
-      textInput("trends_input2", "", placeholder = "Enter codes..."),
-      tags$label("CPC Labels"),
-      textInput("trends_input3", "", placeholder = "Enter labels..."),
-      textInput("n", "n", 50),
-      actionButton("generate_competitive_position", "Go", class='btn-primary'),
-      DTOutput(outputId = 'competition_dt')
-    )
-  ),
+      fluidRow(
+        column(
+          3,
+          tags$label("CPC Codes"),
+          textInput("cpc_codes", "A61K38/", placeholder = "Enter codes..."),
+          tags$label("Sub CPC Codes"),
+          textInput("trends_input2", "", placeholder = "Enter codes..."),
+          tags$label("CPC Labels"),
+          textInput("trends_input3", "", placeholder = "Enter labels..."),
+          actionButton("generate_competitive_position", "Run Analysis", class='btn-primary')
+        ),
+        column(
+          9,
+          h2("Competition Analysis Results"),
+          plotOutput(outputId = 'competition_plot')
+          
+        ))))
+    
+  ,
   
   # Trends analysis page
   tabPanel(
@@ -175,14 +183,13 @@ ui <- navbarPage(
           textInput("trends_input2", "", placeholder = "Enter codes..."),
           tags$label("CPC Labels"),
           textInput("trends_input3", "", placeholder = "Enter labels..."),
-          actionButton("trends_button", "Run Analysis", class = "btn-primary")
+          actionButton("generate_trend", "Run Analysis", class = "btn-primary")
         ),
         column(
           9,
           h2("Trends Analysis Results"),
-          textOutput("trends_output1"),
-          textOutput("trends_output2"),
-          textOutput("trends_output3")
+          plotOutput(outputId = 'trend_plot')
+          
         )))))
 
         
