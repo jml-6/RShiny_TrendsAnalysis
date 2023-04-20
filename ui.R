@@ -154,11 +154,11 @@ ui <- navbarPage(
         column(
           3,
           tags$label("CPC Codes"),
-          textInput("cpc_codes", "A61K38/", placeholder = "Enter codes..."),
+          textInput("comp_cpc_codes", "A61K38/", placeholder = "Enter codes..."),
           tags$label("Sub CPC Codes"),
-          textInput("trends_input2", "", placeholder = "Enter codes..."),
+          textInput("comp_subcode", "", placeholder = "Enter codes..."),
           tags$label("CPC Labels"),
-          textInput("trends_input3", "", placeholder = "Enter labels..."),
+          textInput("comp_label", "", placeholder = "Enter labels..."),
           actionButton("generate_competitive_position", "Run Analysis", class='btn-primary')
         ),
         column(

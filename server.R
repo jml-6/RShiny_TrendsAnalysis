@@ -12,7 +12,7 @@ server <- function(input,output,session) {
 
    ##Here we create our output and stuff
    observeEvent(input$generate_competitive_position, {
-     dt <- cpc %>% filter(grepl(pattern = paste(input$cpc_codes,sep ='',collapse='|'),x = cpc$cpc_group,ignore.case = T))
+     dt <- cpc %>% filter(grepl(pattern = paste(input$comp_cpc_codes,sep ='',collapse='|'),x = cpc$cpc_group,ignore.case = T))
      dt <- merge(dt,patent,by = 'patent_id')
      # merge with assignee
      dt <- merge(dt,assignee,by = 'patent_id') # why is this dropping? no assignee?
@@ -57,8 +57,10 @@ server <- function(input,output,session) {
      
      # Identify patents in each segment (benefit of doing it this way? scale)
      #Add in other inputs###########################################################################################################
-     segments_names <- c('Enzyme Inhibitors', 'Hydrolyzed Proteins', 'Peptides of Undefined Length', 'Fully Defined Peptides of up to Twenty Amino Acids', 'Peptides Containing Over Twenty Amino Acids', 'Not Fully Defined Peptides that Contain up to Twenty Amino Acids')
-     segments_codes <- c('A61K38/005','A61K38/01','A61K38/02','A61K38/04','A61K38/16','A61K38/03')
+     segments_names <- strsplit(input$comp_label, ",\\s*")[[1]]
+
+     segments_codes <- strsplit(input$comp_subcode, ",\\s*")[[1]]
+
      segments_dtlist <- list()
      for (segment in segments_codes) {
        segments_dtlist[[length(segments_dtlist)+1]] <- dt[grepl(pattern = segment,x = dt$cpc_group,ignore.case = T),c('patent_id','disambig_assignee_organization')] %>% unique()
@@ -75,7 +77,7 @@ server <- function(input,output,session) {
      
      totals <- totals %>% arrange(desc(total))
      
-     totals$total_sum <- totals['Enzyme Inhibitors'] + totals["Hydrolyzed Proteins"] + totals["Peptides of Undefined Length"] + totals['Fully Defined Peptides of up to Twenty Amino Acids'] + totals['Peptides Containing Over Twenty Amino Acids'] + totals['Not Fully Defined Peptides that Contain up to Twenty Amino Acids']
+     #totals$total_sum <- totals['Enzyme Inhibitors'] + totals["Hydrolyzed Proteins"] + totals["Peptides of Undefined Length"] + totals['Fully Defined Peptides of up to Twenty Amino Acids'] + totals['Peptides Containing Over Twenty Amino Acids'] + totals['Not Fully Defined Peptides that Contain up to Twenty Amino Acids']
      
      # Save file
      #write.csv(totals,'output/competitive positioning.csv',row.names = F)
@@ -88,15 +90,18 @@ server <- function(input,output,session) {
      # Create a vector of heights (total column of totals table)
      heights <- totals$cagr_2017_2021
      
-     # Create a bar chart
-     competition$plot <- barplot(heights, 
-             main = "Competition Analysis (2017 - 2021)",  # Specify the title of the chart
-             ylab = "CAGR",               # Specify the label for the y-axis
-             names.arg = totals$disambig_assignee_organization,
-             las = 3) # Specify the labels for the x-axis (assuming "category" is the column name in your "totals" table)
-     # Note: You can customize other aspects of the bar chart, such as font size, axis limits, etc., using additional parameters in the barplot() function.
+     df <- data.frame(
+       heights = heights,
+       names = totals$disambig_assignee_organization
+     )
      
+     competition$plot <- ggplot(data = df) +
+       geom_bar(aes(x = names, y = heights, fill = names), 
+                stat = "identity", position = "dodge") +
+       labs(title = "Competition Analysis (2017 - 2021)", y = "CAGR") +
+       theme(axis.text.x = element_text(angle = 90, vjust = 0.5), legend.position = 'none')
      
+
      
      output$competition_plot <- renderPlot({competition$plot})
      
@@ -152,8 +157,9 @@ server <- function(input,output,session) {
      
      # Identify patents in each segment (benefit of doing it this way? scale)
      #Add in other inputs###########################################################################################################
-     segments_names <- c('Enzyme Inhibitors', 'Hydrolyzed Proteins', 'Peptides of Undefined Length', 'Fully Defined Peptides of up to Twenty Amino Acids', 'Peptides Containing Over Twenty Amino Acids', 'Not Fully Defined Peptides that Contain up to Twenty Amino Acids')
-     segments_codes <- c('A61K38/005','A61K38/01','A61K38/02','A61K38/04','A61K38/16','A61K38/03')
+     segments_names <- strsplit(input$trends_input3, ",\\s*")[[1]]
+     segments_codes <- strsplit(input$trends_input2, ",\\s*")[[1]]
+
      segments_dtlist <- list()
      for (segment in segments_codes) {
        segments_dtlist[[length(segments_dtlist)+1]] <- dt[grepl(pattern = segment,x = dt$cpc_group,ignore.case = T),c('patent_id','disambig_assignee_organization')] %>% unique()
@@ -170,7 +176,7 @@ server <- function(input,output,session) {
      
      totals <- totals %>% arrange(desc(total))
      
-     totals$total_sum <- totals['Enzyme Inhibitors'] + totals["Hydrolyzed Proteins"] + totals["Peptides of Undefined Length"] + totals['Fully Defined Peptides of up to Twenty Amino Acids'] + totals['Peptides Containing Over Twenty Amino Acids'] + totals['Not Fully Defined Peptides that Contain up to Twenty Amino Acids']
+    # totals$total_sum <- totals['Enzyme Inhibitors'] + totals["Hydrolyzed Proteins"] + totals["Peptides of Undefined Length"] + totals['Fully Defined Peptides of up to Twenty Amino Acids'] + totals['Peptides Containing Over Twenty Amino Acids'] + totals['Not Fully Defined Peptides that Contain up to Twenty Amino Acids']
      
      # Save file
      #write.csv(totals,'output/competitive positioning.csv',row.names = F)
@@ -185,10 +191,10 @@ server <- function(input,output,session) {
      
      # Create a bar chart
       
-     
+     browser
      trend$plot <- totals %>%
-       pivot_longer(`Enzyme Inhibitors`:`Not Fully Defined Peptides that Contain up to Twenty Amino Acids`,
-                    names_to = "enzyme type") %>%
+       pivot_longer(cols = 5:last_col(),
+                    names_to = "subcode type") %>%
        ggplot(mapping = aes(y=disambig_assignee_organization,
                             x=value,
                             fill=`enzyme type`)) +
